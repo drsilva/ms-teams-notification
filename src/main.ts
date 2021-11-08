@@ -34,11 +34,12 @@ async function run(): Promise<void> {
     const [owner, repo] = (process.env.GITHUB_REPOSITORY || '').split('/')
     const sha = process.env.GITHUB_SHA || ''
     const runId = process.env.GITHUB_RUN_ID || ''
-    const prId = process.event.number || ''
-    const prTitle = process.event.pull_request.title || ''
+    const prNum = process.env.PULL_REQUEST_NUMBER || ''
+    const prTitle = process.env.PULL_REQUEST_TITLE || ''
     const runNum = process.env.GITHUB_RUN_NUMBER || ''
-    const params = {owner, repo, ref: sha}    
-    const repoName = params.owner + '/' + params.repo    
+    const prUrl = process.env.PULL_REQUEST_URL || ''
+    const params = {owner, repo, ref: sha}
+    const repoName = params.owner + '/' + params.repo
     const repoUrl = `https://github.com/${repoName}`
 
     const octokit = new Octokit({auth: `token ${githubToken}`})
@@ -52,9 +53,10 @@ async function run(): Promise<void> {
       author,
       runNum,
       runId,
-      prId,
+      prNum,
       prTitle,
-      repoName,      
+      prUrl,
+      repoName,
       sha,
       repoUrl,
       timestamp
