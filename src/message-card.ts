@@ -5,8 +5,9 @@ export function createMessageCard(
   author: any,
   runNum: string,
   runId: string,
-  prId: string,
+  prNum: string,
   prTitle: string,
+  prUrl: string,
   repoName: string,
   sha: string,
   repoUrl: string,
@@ -35,7 +36,8 @@ export function createMessageCard(
     potentialAction: [
       {
         '@context': 'http://schema.org',
-        target: [`${repoUrl}/pull/${prId}`],
+        // target: [`${repoUrl}/pull/${prNum}`],
+        target: [`${prUrl}`],
         '@type': 'ViewAction',
         name: 'Visualizar Pull Request'
       }
