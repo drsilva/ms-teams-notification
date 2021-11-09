@@ -1,4 +1,3 @@
-//teste
 import * as core from '@actions/core'
 import {Octokit} from '@octokit/rest'
 import axios from 'axios'
@@ -30,9 +29,11 @@ async function run(): Promise<void> {
     const prTitle = core.getInput('pull-request-title', {required: true})
     const prUrl = core.getInput('pull-request-url', {required: true})
 
+    const dateFormat = "DD/MM/YYYY HH:mm"
+
     const timestamp = moment()
       .tz(timezone)
-      .format('dddd, MMMM Do YYYY, h:mm:ss a z')
+      .format(dateFormat)
 
     const repoName = process.env.GITHUB_REPOSITORY
 
@@ -41,7 +42,7 @@ async function run(): Promise<void> {
     const sha = process.env.GITHUB_SHA || ''
     const params = {owner, repo, ref: sha}
     const commit = await octokit.repos.getCommit(params)
-    const author = commit.data.author
+    const author = commit.data.commit.author
 
     const message =
       'PR #' +
@@ -49,11 +50,11 @@ async function run(): Promise<void> {
       ' em ' +
       repoName +
       '<br>' +
-      'Da branch ' +
-      `${process.env.GITHUB_HEAD_REF}` +
+      'Da branch: ' +
+      '<b>'+`${process.env.GITHUB_HEAD_REF}`+'</b>'
       ' <br>' +
-      'Para a branch ' +
-      `${process.env.GITHUB_BASE_REF}`
+      'Para a branch: ' +
+      '<b>'+`${process.env.GITHUB_BASE_REF}`+'</b>'
 
     const messageCard = await createMessageCard(
       notificationSummary,

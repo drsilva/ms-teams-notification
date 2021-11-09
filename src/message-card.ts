@@ -23,9 +23,9 @@ export function createMessageCard(
     sections: [
       {
         activityTitle: `${prTitle}`,
-        activityImage: avatar_url,
-        activitySubtitle: `por ${author.name} [(@${author.login})](${author.html_url}) em ${timestamp}`,
-        activityText: `${message}`
+        activityImage: avatar_url,        
+        activityText: `${message}`,
+        activitySubtitle: `por ${author.name} [(@${author.login})](${author.html_url}) em ${timestamp}`
       }
     ],
     potentialAction: [
