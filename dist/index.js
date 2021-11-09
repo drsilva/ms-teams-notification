@@ -2458,8 +2458,8 @@ function createMessageCard(notificationSummary, notificationColor, author, messa
             {
                 activityTitle: `${prTitle}`,
                 activityImage: avatar_url,
-                activitySubtitle: `por ${author.name} [(@${author.login})](${author.html_url}) em ${timestamp}`,
-                activityText: `${message}`
+                activityText: `${message}`,
+                activitySubtitle: `por ${author.name} [(@${author.login})](${author.html_url}) em ${timestamp}`
             }
         ],
         potentialAction: [
@@ -3046,7 +3046,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-//teste
 const core = __importStar(__webpack_require__(470));
 const rest_1 = __webpack_require__(889);
 const axios_1 = __importDefault(__webpack_require__(53));
@@ -3073,23 +3072,27 @@ function run() {
             const prNum = core.getInput('pull-request-number', { required: true });
             const prTitle = core.getInput('pull-request-title', { required: true });
             const prUrl = core.getInput('pull-request-url', { required: true });
+            const dateFormat = "DD/MM/YYYY HH:mm";
             const timestamp = moment_timezone_1.default()
                 .tz(timezone)
-                .format('dddd, MMMM Do YYYY, h:mm:ss a z');
+                .format(dateFormat);
             const repoName = process.env.GITHUB_REPOSITORY;
             const [owner, repo] = (process.env.GITHUB_REPOSITORY || '').split('/');
             const octokit = new rest_1.Octokit({ auth: `token ${githubToken}` });
             const sha = process.env.GITHUB_SHA || '';
             const params = { owner, repo, ref: sha };
             const commit = yield octokit.repos.getCommit(params);
-            const author = commit.data.author;
+            const author = commit.data.commit.author;
             const message = 'PR #' +
                 prNum +
                 ' em ' +
                 repoName +
                 '<br>' +
-                'Da branch ' + `${process.env.GITHUB_HEAD_REF}` + ' <br>' +
-                'Para a branch ' + `${process.env.GITHUB_BASE_REF}`;
+                'Da branch: ' +
+                '<b>' + `${process.env.GITHUB_HEAD_REF}` + '</b>';
+            ' <br>' +
+                'Para a branch: ' +
+                '<b>' + `${process.env.GITHUB_BASE_REF}` + '</b>';
             const messageCard = yield message_card_1.createMessageCard(notificationSummary, notificationColor, author, message, prTitle, prUrl, timestamp);
             axios_1.default
                 .post(msTeamsWebhookUri, messageCard)

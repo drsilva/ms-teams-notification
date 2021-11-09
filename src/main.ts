@@ -29,7 +29,7 @@ async function run(): Promise<void> {
     const prTitle = core.getInput('pull-request-title', {required: true})
     const prUrl = core.getInput('pull-request-url', {required: true})
 
-    const dateFormat = "DD/MM/YYYY HH:mm"
+    const dateFormat = 'DD/MM/YYYY HH:mm'
 
     const timestamp = moment()
       .tz(timezone)
@@ -51,10 +51,14 @@ async function run(): Promise<void> {
       repoName +
       '<br>' +
       'Da branch: ' +
-      '<b>'+`${process.env.GITHUB_HEAD_REF}`+'</b>'
-      ' <br>' +
+      '<b>' +
+      `${process.env.GITHUB_HEAD_REF}` +
+      '</b>'
+    ' <br>' +
       'Para a branch: ' +
-      '<b>'+`${process.env.GITHUB_BASE_REF}`+'</b>'
+      '<b>' +
+      `${process.env.GITHUB_BASE_REF}` +
+      '</b>'
 
     const messageCard = await createMessageCard(
       notificationSummary,
