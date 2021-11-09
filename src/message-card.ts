@@ -2,6 +2,7 @@ export function createMessageCard(
   notificationSummary: string,
   notificationColor: string,
   author: any,
+  authorName: string,
   message: string,
   prTitle: string,
   prUrl: string,
@@ -25,7 +26,7 @@ export function createMessageCard(
         activityTitle: `${prTitle}`,
         activityImage: avatar_url,
         activityText: `${message}`,
-        activitySubtitle: `por ${author.name} [(@${author.login})](${author.html_url}) em ${timestamp}`
+        activitySubtitle: `por ${authorName} [(@${author.login})](${author.html_url}) em ${timestamp}`
       }
     ],
     potentialAction: [

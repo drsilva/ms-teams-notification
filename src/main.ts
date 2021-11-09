@@ -42,7 +42,8 @@ async function run(): Promise<void> {
     const sha = process.env.GITHUB_SHA || ''
     const params = {owner, repo, ref: sha}
     const commit = await octokit.repos.getCommit(params)
-    const author = commit.data.commit.author
+    const author = commit.data.author
+    const authorName = commit.data.commit.author.name
 
     const message =
       'PR #' +
@@ -50,20 +51,16 @@ async function run(): Promise<void> {
       ' em ' +
       repoName +
       '<br>' +
-      'Da branch: ' +
-      '<b>' +
+      'Da branch: <b>' +
       `${process.env.GITHUB_HEAD_REF}` +
       '</b>'
-    ' <br>' +
-      'Para a branch: ' +
-      '<b>' +
-      `${process.env.GITHUB_BASE_REF}` +
-      '</b>'
+    '<br>' + 'Para a branch: <b>' + `${process.env.GITHUB_BASE_REF}` + '</b>'
 
     const messageCard = await createMessageCard(
       notificationSummary,
       notificationColor,
       author,
+      authorName,
       message,
       prTitle,
       prUrl,
