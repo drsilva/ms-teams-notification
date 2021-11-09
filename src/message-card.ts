@@ -1,16 +1,10 @@
 export function createMessageCard(
   notificationSummary: string,
   notificationColor: string,
-  commit: any,
   author: any,
-  runNum: string,
-  runId: string,
-  prNum: string,
+  message: string,
   prTitle: string,
   prUrl: string,
-  repoName: string,
-  sha: string,
-  repoUrl: string,
   timestamp: string
 ): any {
   let avatar_url =
@@ -30,13 +24,13 @@ export function createMessageCard(
       {
         activityTitle: `${prTitle}`,
         activityImage: avatar_url,
-        activitySubtitle: `por ${commit.data.commit.author.name} [(@${author.login})](${author.html_url}) em ${timestamp}`
+        activitySubtitle: `por ${author.name} [(@${author.login})](${author.html_url}) em ${timestamp}`,
+        activityText: `${message}`
       }
     ],
     potentialAction: [
       {
         '@context': 'http://schema.org',
-        // target: [`${repoUrl}/pull/${prNum}`],
         target: [`${prUrl}`],
         '@type': 'ViewAction',
         name: 'Visualizar Pull Request'

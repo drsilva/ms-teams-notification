@@ -26,43 +26,41 @@ async function run(): Promise<void> {
       core.getInput('notification-summary') || 'GitHub Action Notification'
     const notificationColor = core.getInput('notification-color') || '0b93ff'
     const timezone = core.getInput('timezone') || 'UTC'
+    const prNum = core.getInput('pull-request-number', {required: true})
+    const prTitle = core.getInput('pull-request-title', {required: true})
+    const prUrl = core.getInput('pull-request-url', {required: true})
 
     const timestamp = moment()
       .tz(timezone)
       .format('dddd, MMMM Do YYYY, h:mm:ss a z')
 
-    const [owner, repo] = (process.env.GITHUB_REPOSITORY || '').split('/')
-    const sha = process.env.GITHUB_SHA || ''
-    const runId = process.env.GITHUB_RUN_ID || ''
-    const prNum = process.env.PULL_REQUEST_NUMBER || ''
-    const prTitle = process.env.PULL_REQUEST_TITLE || ''
-    const runNum = process.env.GITHUB_RUN_NUMBER || ''
-    const prUrl = process.env.PULL_REQUEST_URL || ''
-    const params = {owner, repo, ref: sha}
-    const repoName = params.owner + '/' + params.repo
-    const repoUrl = `https://github.com/${repoName}`
+    const repoName = process.env.GITHUB_REPOSITORY
 
+    const [owner, repo] = (process.env.GITHUB_REPOSITORY || '').split('/')
     const octokit = new Octokit({auth: `token ${githubToken}`})
+    const sha = process.env.GITHUB_SHA || ''
+    const params = {owner, repo, ref: sha}
     const commit = await octokit.repos.getCommit(params)
     const author = commit.data.author
+
+    const message =
+      'PR #' +
+      prNum +
+      ' em ' +
+      repoName +
+      '<br>' +
+      'Da branch ${{github.head_ref}} ' +
+      'Para ${{github.base_ref}}'
 
     const messageCard = await createMessageCard(
       notificationSummary,
       notificationColor,
-      commit,
       author,
-      runNum,
-      runId,
-      prNum,
+      message,
       prTitle,
       prUrl,
-      repoName,
-      sha,
-      repoUrl,
       timestamp
     )
-
-    console.log(messageCard)
 
     axios
       .post(msTeamsWebhookUri, messageCard)

@@ -2441,7 +2441,7 @@ module.exports = require("child_process");
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createMessageCard = void 0;
-function createMessageCard(notificationSummary, notificationColor, commit, author, runNum, runId, prNum, prTitle, prUrl, repoName, sha, repoUrl, timestamp) {
+function createMessageCard(notificationSummary, notificationColor, author, message, prTitle, prUrl, timestamp) {
     let avatar_url = 'https://www.gravatar.com/avatar/05b6d8cc7c662bf81e01b39254f88a48?d=identicon';
     if (author) {
         if (author.avatar_url) {
@@ -2458,13 +2458,13 @@ function createMessageCard(notificationSummary, notificationColor, commit, autho
             {
                 activityTitle: `${prTitle}`,
                 activityImage: avatar_url,
-                activitySubtitle: `por ${commit.data.commit.author.name} [(@${author.login})](${author.html_url}) em ${timestamp}`
+                activitySubtitle: `por ${author.name} [(@${author.login})](${author.html_url}) em ${timestamp}`,
+                activityText: `${message}`
             }
         ],
         potentialAction: [
             {
                 '@context': 'http://schema.org',
-                // target: [`${repoUrl}/pull/${prNum}`],
                 target: [`${prUrl}`],
                 '@type': 'ViewAction',
                 name: 'Visualizar Pull Request'
@@ -3070,24 +3070,23 @@ function run() {
             const notificationSummary = core.getInput('notification-summary') || 'GitHub Action Notification';
             const notificationColor = core.getInput('notification-color') || '0b93ff';
             const timezone = core.getInput('timezone') || 'UTC';
+            const prNum = core.getInput('pull-request-number', { required: true });
+            const prTitle = core.getInput('pull-request-title', { required: true });
+            const prUrl = core.getInput('pull-request-url', { required: true });
             const timestamp = moment_timezone_1.default()
                 .tz(timezone)
                 .format('dddd, MMMM Do YYYY, h:mm:ss a z');
+            const repoName = process.env.GITHUB_REPOSITORY;
             const [owner, repo] = (process.env.GITHUB_REPOSITORY || '').split('/');
-            const sha = process.env.GITHUB_SHA || '';
-            const runId = process.env.GITHUB_RUN_ID || '';
-            const prNum = process.env.PULL_REQUEST_NUMBER || '';
-            const prTitle = process.env.PULL_REQUEST_TITLE || '';
-            const runNum = process.env.GITHUB_RUN_NUMBER || '';
-            const prUrl = process.env.PULL_REQUEST_URL || '';
-            const params = { owner, repo, ref: sha };
-            const repoName = params.owner + '/' + params.repo;
-            const repoUrl = `https://github.com/${repoName}`;
             const octokit = new rest_1.Octokit({ auth: `token ${githubToken}` });
+            const sha = process.env.GITHUB_SHA || '';
+            const params = { owner, repo, ref: sha };
             const commit = yield octokit.repos.getCommit(params);
             const author = commit.data.author;
-            const messageCard = yield message_card_1.createMessageCard(notificationSummary, notificationColor, commit, author, runNum, runId, prNum, prTitle, prUrl, repoName, sha, repoUrl, timestamp);
-            console.log(messageCard);
+            const message = 'PR #' + prNum + ' em ' + repoName + '<br>'
+                + 'Da branch ${{github.head_ref}} '
+                + 'Para ${{github.base_ref}}';
+            const messageCard = yield message_card_1.createMessageCard(notificationSummary, notificationColor, author, message, prTitle, prUrl, timestamp);
             axios_1.default
                 .post(msTeamsWebhookUri, messageCard)
                 .then(function (response) {
