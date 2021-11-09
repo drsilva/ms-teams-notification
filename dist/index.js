@@ -3083,9 +3083,13 @@ function run() {
             const params = { owner, repo, ref: sha };
             const commit = yield octokit.repos.getCommit(params);
             const author = commit.data.author;
-            const message = 'PR #' + prNum + ' em ' + repoName + '<br>'
-                + 'Da branch ${{github.head_ref}} '
-                + 'Para ${{github.base_ref}}';
+            const message = 'PR #' +
+                prNum +
+                ' em ' +
+                repoName +
+                '<br>' +
+                'Da branch ' + `${process.env.GITHUB_HEAD_REF}` + ' <br>' +
+                'Para a branch ' + `${process.env.GITHUB_BASE_REF}`;
             const messageCard = yield message_card_1.createMessageCard(notificationSummary, notificationColor, author, message, prTitle, prUrl, timestamp);
             axios_1.default
                 .post(msTeamsWebhookUri, messageCard)

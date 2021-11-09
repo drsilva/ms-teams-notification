@@ -49,8 +49,11 @@ async function run(): Promise<void> {
       ' em ' +
       repoName +
       '<br>' +
-      'Da branch '+`${process.env.GITHUB_HEAD_REF}`+' <br>' +
-      'Para a branch '+`${process.env.GITHUB_BASE_REF}`
+      'Da branch ' +
+      `${process.env.GITHUB_HEAD_REF}` +
+      ' <br>' +
+      'Para a branch ' +
+      `${process.env.GITHUB_BASE_REF}`
 
     const messageCard = await createMessageCard(
       notificationSummary,
