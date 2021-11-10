@@ -76,15 +76,15 @@ async function run(): Promise<void> {
       timestamp
     )
 
-    axios
-      .post(msTeamsWebhookUri, messageCard)
-      .then(function(response) {
-        console.log(response)
-        core.debug(response.data)
-      })
-      .catch(function(error) {
-        core.debug(error)
-      })
+    // axios
+    //   .post(msTeamsWebhookUri, messageCard)
+    //   .then(function(response) {
+    //     console.log(response)
+    //     core.debug(response.data)
+    //   })
+    //   .catch(function(error) {
+    //     core.debug(error)
+    //   })
 
     axios
       .post(msTeamsWebhookUri, adaptiveCard)
