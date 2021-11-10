@@ -1,6 +1,6 @@
 name: 'Microsoft Teams Notification'
 description: 'Send a custom notification message to a Microsoft Teams channel with GitHub repo details'
-author: 'jdcargile'
+author: 'drsilva'
 branding:
   icon: message-circle
   color: purple 
@@ -18,7 +18,7 @@ inputs:
     description: 'Color of notification header line'
     required: true 
   timezone:
-    description: 'Timezone (ex. America/Denver)'
+    description: 'Timezone (ex. America/Sao_Paulo)'
     required: false
 runs:
   using: 'node12'

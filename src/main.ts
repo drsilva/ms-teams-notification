@@ -52,16 +52,16 @@ async function run(): Promise<void> {
        <br>Da branch: <b>${process.env.GITHUB_HEAD_REF}</b>
        <br>Para a branch: <b>${process.env.GITHUB_BASE_REF}</b>`
 
-    const messageCard = await createMessageCard(
-      notificationSummary,
-      notificationColor,
-      author,
-      authorName,
-      message,
-      prTitle,
-      prUrl,
-      timestamp
-    )
+    // const messageCard = await createMessageCard(
+    //   notificationSummary,
+    //   notificationColor,
+    //   author,
+    //   authorName,
+    //   message,
+    //   prTitle,
+    //   prUrl,
+    //   timestamp
+    // )
 
     const adaptiveCard = await createAdaptiveCard(
       author,
@@ -75,16 +75,6 @@ async function run(): Promise<void> {
       prNum,
       timestamp
     )
-
-    // axios
-    //   .post(msTeamsWebhookUri, messageCard)
-    //   .then(function(response) {
-    //     console.log(response)
-    //     core.debug(response.data)
-    //   })
-    //   .catch(function(error) {
-    //     core.debug(error)
-    //   })
 
     axios
       .post(msTeamsWebhookUri, adaptiveCard)
