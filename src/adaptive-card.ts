@@ -218,6 +218,10 @@ export function createAdaptiveCard(
           type: 'AdaptiveCard',
           body: [
             {
+              type: 'TextBlock',
+              text: 'Teste2'
+            },
+            {
               type: 'Input.Date',
               id: 'dueDate',
               isRequired: true,
