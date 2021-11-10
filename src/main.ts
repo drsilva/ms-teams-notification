@@ -73,6 +73,9 @@ async function run(): Promise<void> {
         core.debug(response.data)
       })
       .catch(function(error) {
+        console.log('Erro')
+        console.log(error)
+        console.log('Erro')
         core.debug(error)
       })
   } catch (error) {

@@ -3049,11 +3049,14 @@ function run() {
             axios_1.default
                 .post(msTeamsWebhookUri, adaptiveCard)
                 .then(function (response) {
-                console.log("Teste");
+                console.log('Teste');
                 console.log(response);
                 core.debug(response.data);
             })
                 .catch(function (error) {
+                console.log('Erro');
+                console.log(error);
+                console.log('Erro');
                 core.debug(error);
             });
         }
