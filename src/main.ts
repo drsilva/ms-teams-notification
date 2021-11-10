@@ -45,16 +45,9 @@ async function run(): Promise<void> {
     const author = commit.data.author
     const authorName = commit.data.commit.author.name
 
-    const message =
-      'PR #' +
-      prNum +
-      ' em ' +
-      repoName +
-      '<br>' +
-      'Da branch: <b>' +
-      `${process.env.GITHUB_HEAD_REF}` +
-      '</b>'
-    '<br>' + 'Para a branch: <b>' + `${process.env.GITHUB_BASE_REF}` + '</b>'
+    const message = `PR #${prNum} em ${repoName}
+       <br>Da branch: <b>${process.env.GITHUB_HEAD_REF}</b>
+       <br>Para a branch: <b>${process.env.GITHUB_BASE_REF}</b>`
 
     const messageCard = await createMessageCard(
       notificationSummary,

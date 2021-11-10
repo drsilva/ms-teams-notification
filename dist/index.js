@@ -2458,8 +2458,9 @@ function createMessageCard(notificationSummary, notificationColor, author, autho
             {
                 activityTitle: `${prTitle}`,
                 activityImage: avatar_url,
-                activityText: `${message}`,
-                activitySubtitle: `por ${authorName} [(@${author.login})](${author.html_url}) em ${timestamp}`
+                activityText: `${message}` +
+                    `<br>` +
+                    `por <b>${authorName}</b> [(@${author.login})](${author.html_url}) em ${timestamp}`
             }
         ],
         potentialAction: [
@@ -3084,11 +3085,9 @@ function run() {
             const commit = yield octokit.repos.getCommit(params);
             const author = commit.data.author;
             const authorName = commit.data.commit.author.name;
-            const message = 'PR #' + prNum + ' em ' + repoName +
-                '<br>' +
-                'Da branch: <b>' + `${process.env.GITHUB_HEAD_REF}` + '</b>';
-            '<br>' +
-                'Para a branch: <b>' + `${process.env.GITHUB_BASE_REF}` + '</b>';
+            const message = `PR #${prNum} em ${repoName}
+       <br>Da branch: <b>${process.env.GITHUB_HEAD_REF}</b>
+       <br>Para a branch: <b>${process.env.GITHUB_BASE_REF}</b>`;
             const messageCard = yield message_card_1.createMessageCard(notificationSummary, notificationColor, author, authorName, message, prTitle, prUrl, timestamp);
             axios_1.default
                 .post(msTeamsWebhookUri, messageCard)
