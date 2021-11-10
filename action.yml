@@ -20,6 +20,15 @@ inputs:
   timezone:
     description: 'Timezone (ex. America/Sao_Paulo)'
     required: false
+  pull-request-number': 
+      description: 'Pull Request Number'
+      required: true
+  pull-request-title':
+      description: 'Pull Request Title'
+      required: true
+  pull-request-url':
+      description: 'Pull Request Url'
+      required: true
 runs:
   using: 'node12'
   main: 'dist/index.js'
