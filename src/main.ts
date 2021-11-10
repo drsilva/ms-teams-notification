@@ -68,7 +68,7 @@ async function run(): Promise<void> {
     axios
       .post(msTeamsWebhookUri, adaptiveCard)
       .then(function(response) {
-        console.log("Teste")
+        console.log('Teste')
         console.log(response)
         core.debug(response.data)
       })

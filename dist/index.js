@@ -3045,20 +3045,11 @@ function run() {
             const message = `PR #${prNum} em ${repoName}
        <br>Da branch: <b>${process.env.GITHUB_HEAD_REF}</b>
        <br>Para a branch: <b>${process.env.GITHUB_BASE_REF}</b>`;
-            // const messageCard = await createMessageCard(
-            //   notificationSummary,
-            //   notificationColor,
-            //   author,
-            //   authorName,
-            //   message,
-            //   prTitle,
-            //   prUrl,
-            //   timestamp
-            // )
             const adaptiveCard = yield adaptive_card_1.createAdaptiveCard(author, authorName, message, prTitle, prUrl, repoName, branchTarget, branchDest, prNum, timestamp);
             axios_1.default
                 .post(msTeamsWebhookUri, adaptiveCard)
                 .then(function (response) {
+                console.log("Teste");
                 console.log(response);
                 core.debug(response.data);
             })
