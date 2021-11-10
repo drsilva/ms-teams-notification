@@ -2460,7 +2460,7 @@ function createMessageCard(notificationSummary, notificationColor, author, autho
                 activityImage: avatar_url,
                 activityText: `${message}` +
                     `<br>` +
-                    `por <b>${authorName}</b> [(@${author.login})](${author.html_url}) em ${timestamp}`
+                    `Autor: <b>${authorName}</b> [(@${author.login})](${author.html_url}) em ${timestamp}`
             }
         ],
         potentialAction: [
@@ -3052,6 +3052,7 @@ const rest_1 = __webpack_require__(889);
 const axios_1 = __importDefault(__webpack_require__(53));
 const moment_timezone_1 = __importDefault(__webpack_require__(717));
 const message_card_1 = __webpack_require__(131);
+const adaptive_card_1 = __webpack_require__(676);
 const escapeMarkdownTokens = (text) => text
     .replace(/\n\ {1,}/g, '\n ')
     .replace(/\_/g, '\\_')
@@ -3077,7 +3078,7 @@ function run() {
             const timestamp = moment_timezone_1.default()
                 .tz(timezone)
                 .format(dateFormat);
-            const repoName = process.env.GITHUB_REPOSITORY;
+            const repoName = String(process.env.GITHUB_REPOSITORY);
             const [owner, repo] = (process.env.GITHUB_REPOSITORY || '').split('/');
             const octokit = new rest_1.Octokit({ auth: `token ${githubToken}` });
             const sha = process.env.GITHUB_SHA || '';
@@ -3085,12 +3086,24 @@ function run() {
             const commit = yield octokit.repos.getCommit(params);
             const author = commit.data.author;
             const authorName = commit.data.commit.author.name;
+            const branchTarget = String(process.env.GITHUB_HEAD_REF);
+            const branchDest = String(process.env.GITHUB_BASE_REF);
             const message = `PR #${prNum} em ${repoName}
        <br>Da branch: <b>${process.env.GITHUB_HEAD_REF}</b>
        <br>Para a branch: <b>${process.env.GITHUB_BASE_REF}</b>`;
             const messageCard = yield message_card_1.createMessageCard(notificationSummary, notificationColor, author, authorName, message, prTitle, prUrl, timestamp);
+            const adaptiveCard = yield adaptive_card_1.createAdaptiveCard(author, authorName, message, prTitle, prUrl, repoName, branchTarget, branchDest, prNum, timestamp);
             axios_1.default
                 .post(msTeamsWebhookUri, messageCard)
+                .then(function (response) {
+                console.log(response);
+                core.debug(response.data);
+            })
+                .catch(function (error) {
+                core.debug(error);
+            });
+            axios_1.default
+                .post(msTeamsWebhookUri, adaptiveCard)
                 .then(function (response) {
                 console.log(response);
                 core.debug(response.data);
@@ -15143,6 +15156,124 @@ module.exports = function httpAdapter(config) {
     }
   });
 };
+
+
+/***/ }),
+
+/***/ 676:
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.createAdaptiveCard = void 0;
+function createAdaptiveCard(author, authorName, message, prTitle, prUrl, prNum, repoName, branchTarget, branchDest, timestamp) {
+    let avatar_url = 'https://www.gravatar.com/avatar/05b6d8cc7c662bf81e01b39254f88a48?d=identicon';
+    if (author) {
+        if (author.avatar_url) {
+            avatar_url = author.avatar_url;
+        }
+    }
+    const adaptiveCard = {
+        $schema: 'https://adaptivecards.io/schemas/adaptive-card.json',
+        type: 'AdaptiveCard',
+        version: '1.0',
+        body: [
+            {
+                type: 'Container',
+                items: [
+                    {
+                        type: 'TextBlock',
+                        text: prTitle,
+                        weight: 'bolder',
+                        size: 'medium'
+                    },
+                    {
+                        type: 'ColumnSet',
+                        columns: [
+                            {
+                                type: 'Column',
+                                width: 'auto',
+                                items: [
+                                    {
+                                        type: 'Image',
+                                        url: avatar_url,
+                                        size: 'small',
+                                        style: 'person'
+                                    }
+                                ]
+                            },
+                            {
+                                type: 'Column',
+                                width: 'stretch',
+                                items: [
+                                    {
+                                        type: 'TextBlock',
+                                        text: authorName,
+                                        weight: 'bolder',
+                                        wrap: true
+                                    },
+                                    {
+                                        type: 'TextBlock',
+                                        spacing: 'none',
+                                        text: 'Qyon - Time Gestão Fácil',
+                                        isSubtle: true,
+                                        wrap: true
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                type: 'Container',
+                items: [
+                    {
+                        type: 'TextBlock',
+                        text: message,
+                        wrap: true
+                    },
+                    {
+                        type: 'FactSet',
+                        facts: [
+                            {
+                                title: 'PR #:',
+                                value: prNum
+                            },
+                            {
+                                title: 'Repositório:',
+                                value: repoName
+                            },
+                            {
+                                title: 'Branch Origem:',
+                                value: branchTarget
+                            },
+                            {
+                                title: 'Branch Destino:',
+                                value: branchDest
+                            },
+                            {
+                                title: 'Data:',
+                                value: timestamp
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        potentialAction: [
+            {
+                '@context': 'http://schema.org',
+                target: [`${prUrl}`],
+                '@type': 'ViewAction',
+                name: 'Visualizar Pull Request'
+            }
+        ]
+    };
+    return adaptiveCard;
+}
+exports.createAdaptiveCard = createAdaptiveCard;
 
 
 /***/ }),

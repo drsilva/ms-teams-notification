@@ -3,6 +3,7 @@ import {Octokit} from '@octokit/rest'
 import axios from 'axios'
 import moment from 'moment-timezone'
 import {createMessageCard} from './message-card'
+import {createAdaptiveCard} from './adaptive-card'
 
 const escapeMarkdownTokens = (text: string) =>
   text
@@ -35,7 +36,7 @@ async function run(): Promise<void> {
       .tz(timezone)
       .format(dateFormat)
 
-    const repoName = process.env.GITHUB_REPOSITORY
+    const repoName = String(process.env.GITHUB_REPOSITORY)
 
     const [owner, repo] = (process.env.GITHUB_REPOSITORY || '').split('/')
     const octokit = new Octokit({auth: `token ${githubToken}`})
@@ -44,6 +45,8 @@ async function run(): Promise<void> {
     const commit = await octokit.repos.getCommit(params)
     const author = commit.data.author
     const authorName = commit.data.commit.author.name
+    const branchTarget = String(process.env.GITHUB_HEAD_REF)
+    const branchDest = String(process.env.GITHUB_BASE_REF)
 
     const message = `PR #${prNum} em ${repoName}
        <br>Da branch: <b>${process.env.GITHUB_HEAD_REF}</b>
@@ -60,8 +63,31 @@ async function run(): Promise<void> {
       timestamp
     )
 
+    const adaptiveCard = await createAdaptiveCard(
+      author,
+      authorName,
+      message,
+      prTitle,
+      prUrl,
+      repoName,
+      branchTarget,
+      branchDest,
+      prNum,
+      timestamp
+    )
+
     axios
       .post(msTeamsWebhookUri, messageCard)
+      .then(function(response) {
+        console.log(response)
+        core.debug(response.data)
+      })
+      .catch(function(error) {
+        core.debug(error)
+      })
+
+    axios
+      .post(msTeamsWebhookUri, adaptiveCard)
       .then(function(response) {
         console.log(response)
         core.debug(response.data)

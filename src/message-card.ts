@@ -28,7 +28,7 @@ export function createMessageCard(
         activityText:
           `${message}` +
           `<br>` +
-          `por <b>${authorName}</b> [(@${author.login})](${author.html_url}) em ${timestamp}`
+          `Autor: <b>${authorName}</b> [(@${author.login})](${author.html_url}) em ${timestamp}`
       }
     ],
     potentialAction: [
