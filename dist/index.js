@@ -3093,15 +3093,15 @@ function run() {
        <br>Para a branch: <b>${process.env.GITHUB_BASE_REF}</b>`;
             const messageCard = yield message_card_1.createMessageCard(notificationSummary, notificationColor, author, authorName, message, prTitle, prUrl, timestamp);
             const adaptiveCard = yield adaptive_card_1.createAdaptiveCard(author, authorName, message, prTitle, prUrl, repoName, branchTarget, branchDest, prNum, timestamp);
-            axios_1.default
-                .post(msTeamsWebhookUri, messageCard)
-                .then(function (response) {
-                console.log(response);
-                core.debug(response.data);
-            })
-                .catch(function (error) {
-                core.debug(error);
-            });
+            // axios
+            //   .post(msTeamsWebhookUri, messageCard)
+            //   .then(function(response) {
+            //     console.log(response)
+            //     core.debug(response.data)
+            //   })
+            //   .catch(function(error) {
+            //     core.debug(error)
+            //   })
             axios_1.default
                 .post(msTeamsWebhookUri, adaptiveCard)
                 .then(function (response) {
