@@ -23,6 +23,10 @@ export function createAdaptiveCard(
     version: '1.0',
     body: [
       {
+        type: 'TextBlock',
+        text: 'Teste'
+      },
+      {
         type: 'Container',
         items: [
           {
