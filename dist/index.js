@@ -15128,8 +15128,8 @@ function createAdaptiveCard(author, authorName, message, prTitle, prUrl, prNum, 
         version: '1.0',
         body: [
             {
-                "type": "TextBlock",
-                "text": "Teste"
+                type: 'TextBlock',
+                text: 'Teste'
             },
             {
                 type: 'Container',
@@ -15229,6 +15229,10 @@ function createAdaptiveCard(author, authorName, message, prTitle, prUrl, prNum, 
         version: '1.0',
         body: [
             {
+                type: 'TextBlock',
+                text: 'Teste'
+            },
+            {
                 type: 'Container',
                 items: [
                     {
@@ -15315,6 +15319,10 @@ function createAdaptiveCard(author, authorName, message, prTitle, prUrl, prNum, 
                 card: {
                     type: 'AdaptiveCard',
                     body: [
+                        {
+                            type: 'TextBlock',
+                            text: 'Teste2'
+                        },
                         {
                             type: 'Input.Date',
                             id: 'dueDate',

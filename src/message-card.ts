@@ -21,6 +21,33 @@ export function createMessageCard(
     summary: notificationSummary,
     themeColor: notificationColor,
     title: notificationSummary,
+    items: [
+      {
+        type: 'FactSet',
+        facts: [
+          {
+            title: 'PR #:',
+            value: 'prNum'
+          },
+          {
+            title: 'Repositório:',
+            value: 'repoName'
+          },
+          {
+            title: 'Branch Origem:',
+            value: 'branchTarget'
+          },
+          {
+            title: 'Branch Destino:',
+            value: 'branchDest'
+          },
+          {
+            title: 'Data:',
+            value: timestamp
+          }
+        ]
+      }
+    ],
     sections: [
       {
         activityTitle: `${prTitle}`,
