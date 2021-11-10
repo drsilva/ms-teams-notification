@@ -27,7 +27,7 @@ export function createAdaptiveCard(
         items: [
           {
             type: 'TextBlock',
-            text: prTitle,
+            text: "prTitle",
             weight: 'bolder',
             size: 'medium'
           },
