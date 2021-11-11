@@ -21,33 +21,6 @@ export function createMessageCard(
     summary: notificationSummary,
     themeColor: notificationColor,
     title: notificationSummary,
-    items: [
-      {
-        type: 'FactSet',
-        facts: [
-          {
-            title: 'PR #:',
-            value: 'prNum'
-          },
-          {
-            title: 'Repositório:',
-            value: 'repoName'
-          },
-          {
-            title: 'Branch Origem:',
-            value: 'branchTarget'
-          },
-          {
-            title: 'Branch Destino:',
-            value: 'branchDest'
-          },
-          {
-            title: 'Data:',
-            value: timestamp
-          }
-        ]
-      }
-    ],
     sections: [
       {
         activityTitle: `${prTitle}`,
@@ -55,7 +28,27 @@ export function createMessageCard(
         activityText:
           `${message}` +
           `<br>` +
-          `Autor: <b>${authorName}</b> [(@${author.login})](${author.html_url}) em ${timestamp}`
+          `Autor: <b>${authorName}</b> [(@${author.login})](${author.html_url}) em ${timestamp}`,
+          
+        facts: [
+          {
+            title: 'Board:',
+            value: 'Adaptive Card'
+          },
+          {
+            title: 'List:',
+            value: 'Backlog'
+          },
+          {
+            title: 'Assigned to:',
+            value: 'Matt Hidinger'
+          },
+          {
+            title: 'Due date:',
+            value: 'Not set'
+          }
+        ]
+
       }
     ],
     potentialAction: [
