@@ -2441,7 +2441,12 @@ module.exports = require("child_process");
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createMessageCard = void 0;
-function createMessageCard(notificationSummary, notificationColor, author, authorName, message, prTitle, prUrl, prNum, repoName, branchTarget, branchDest, timestamp) {
+function createMessageCard(notificationSummary, notificationColor, author, authorName, message, prTitle, prUrl, 
+// prNum: string,
+// repoName: string,
+// branchTarget: string,
+// branchDest: string,
+timestamp) {
     let avatar_url = 'https://www.gravatar.com/avatar/05b6d8cc7c662bf81e01b39254f88a48?d=identicon';
     if (author) {
         if (author.avatar_url) {
@@ -3222,7 +3227,12 @@ function run() {
             const message = `PR #${prNum} em ${repoName}
        <br>Da branch: <b>${process.env.GITHUB_HEAD_REF}</b>
        <br>Para a branch: <b>${process.env.GITHUB_BASE_REF}</b>`;
-            const messageCard = yield message_card_1.createMessageCard(notificationSummary, notificationColor, author, authorName, message, prTitle, prUrl, prNum, repoName, branchTarget, branchDest, timestamp);
+            const messageCard = yield message_card_1.createMessageCard(notificationSummary, notificationColor, author, authorName, message, prTitle, prUrl, 
+            // prNum,
+            // repoName,
+            // branchTarget,
+            // branchDest,
+            timestamp);
             const adaptiveCard = yield adaptive_card_1.createAdaptiveCard(author, authorName, message, prTitle, prUrl, repoName, branchTarget, branchDest, prNum, timestamp);
             axios_1.default
                 // .post(msTeamsWebhookUri, adaptiveCard)
