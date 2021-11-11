@@ -3,7 +3,6 @@ import {Octokit} from '@octokit/rest'
 import axios from 'axios'
 import moment from 'moment-timezone'
 import {createMessageCard} from './message-card'
-import {createAdaptiveCard} from './adaptive-card'
 
 const escapeMarkdownTokens = (text: string) =>
   text
@@ -48,48 +47,27 @@ async function run(): Promise<void> {
     const branchTarget = String(process.env.GITHUB_HEAD_REF)
     const branchDest = String(process.env.GITHUB_BASE_REF)
 
-    const message = `PR #${prNum} em ${repoName}
-       <br>Da branch: <b>${process.env.GITHUB_HEAD_REF}</b>
-       <br>Para a branch: <b>${process.env.GITHUB_BASE_REF}</b>`
-
     const messageCard = await createMessageCard(
       notificationSummary,
       notificationColor,
       author,
       authorName,
-      message,
       prTitle,
       prUrl,
       prNum,
       repoName,
       branchTarget,
       branchDest,
-      timestamp
-    )
-
-    const adaptiveCard = await createAdaptiveCard(
-      author,
-      authorName,
-      message,
-      prTitle,
-      prUrl,
-      repoName,
-      branchTarget,
-      branchDest,
-      prNum,
       timestamp
     )
 
     axios
-      // .post(msTeamsWebhookUri, adaptiveCard)
       .post(msTeamsWebhookUri, messageCard)
       .then(function(response) {
-        console.log('Teste')
         console.log(response)
         core.debug(response.data)
       })
       .catch(function(error) {
-        console.log('Erro')
         console.log(error)
         console.log('Erro')
         core.debug(error)

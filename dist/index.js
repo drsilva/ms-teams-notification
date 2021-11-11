@@ -2441,7 +2441,7 @@ module.exports = require("child_process");
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createMessageCard = void 0;
-function createMessageCard(notificationSummary, notificationColor, author, authorName, message, prTitle, prUrl, prNum, repoName, branchTarget, branchDest, timestamp) {
+function createMessageCard(notificationSummary, notificationColor, author, authorName, prTitle, prUrl, prNum, repoName, branchTarget, branchDest, timestamp) {
     let avatar_url = 'https://www.gravatar.com/avatar/05b6d8cc7c662bf81e01b39254f88a48?d=identicon';
     if (author) {
         if (author.avatar_url) {
@@ -2478,7 +2478,7 @@ function createMessageCard(notificationSummary, notificationColor, author, autho
                         value: branchDest
                     },
                     {
-                        name: 'Due date:',
+                        name: 'Data:',
                         value: timestamp
                     }
                 ]
@@ -2490,116 +2490,6 @@ function createMessageCard(notificationSummary, notificationColor, author, autho
                 target: [`${prUrl}`],
                 '@type': 'ViewAction',
                 name: 'Visualizar Pull Request'
-            }
-        ]
-    };
-    const teste = {
-        '@type': 'MessageCard',
-        '@context': 'https://schema.org/extensions',
-        summary: 'Card "Test card"',
-        themeColor: '0078D7',
-        title: 'Card created: "Name of card"',
-        sections: [
-            {
-                activityTitle: 'Miguel Garcia',
-                activitySubtitle: '9/13/2016, 3:34pm',
-                activityImage: 'https://connectorsdemo.azurewebsites.net/images/MSC12_Oscar_002.jpg',
-                facts: [
-                    {
-                        name: 'Board:',
-                        value: 'Name of board'
-                    },
-                    {
-                        name: 'List:',
-                        value: 'Name of list'
-                    },
-                    {
-                        name: 'Assigned to:',
-                        value: '(none)'
-                    },
-                    {
-                        name: 'Due date:',
-                        value: '(none)'
-                    }
-                ],
-                text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
-            }
-        ],
-        potentialAction: [
-            {
-                '@type': 'ActionCard',
-                name: 'Set due date',
-                inputs: [
-                    {
-                        '@type': 'DateInput',
-                        id: 'dueDate',
-                        title: 'Select a date'
-                    }
-                ],
-                actions: [
-                    {
-                        '@type': 'HttpPOST',
-                        name: 'OK',
-                        target: 'http://...'
-                    }
-                ]
-            },
-            {
-                '@type': 'ActionCard',
-                name: 'Move',
-                inputs: [
-                    {
-                        '@type': 'MultichoiceInput',
-                        id: 'move',
-                        title: 'Pick a list',
-                        choices: [
-                            {
-                                display: 'List 1',
-                                value: 'l1'
-                            },
-                            {
-                                display: 'List 2',
-                                value: 'l2'
-                            }
-                        ]
-                    }
-                ],
-                actions: [
-                    {
-                        '@type': 'HttpPOST',
-                        name: 'OK',
-                        target: 'http://...'
-                    }
-                ]
-            },
-            {
-                '@type': 'ActionCard',
-                name: 'Add a comment',
-                inputs: [
-                    {
-                        '@type': 'TextInput',
-                        id: 'comment',
-                        isMultiline: true,
-                        title: 'Enter your comment'
-                    }
-                ],
-                actions: [
-                    {
-                        '@type': 'HttpPOST',
-                        name: 'OK',
-                        target: 'http://...'
-                    }
-                ]
-            },
-            {
-                '@type': 'OpenUri',
-                name: 'View in Trello',
-                targets: [
-                    {
-                        os: 'default',
-                        uri: 'http://...'
-                    }
-                ]
             }
         ]
     };
@@ -3183,7 +3073,6 @@ const rest_1 = __webpack_require__(889);
 const axios_1 = __importDefault(__webpack_require__(53));
 const moment_timezone_1 = __importDefault(__webpack_require__(717));
 const message_card_1 = __webpack_require__(131);
-const adaptive_card_1 = __webpack_require__(676);
 const escapeMarkdownTokens = (text) => text
     .replace(/\n\ {1,}/g, '\n ')
     .replace(/\_/g, '\\_')
@@ -3219,21 +3108,14 @@ function run() {
             const authorName = commit.data.commit.author.name;
             const branchTarget = String(process.env.GITHUB_HEAD_REF);
             const branchDest = String(process.env.GITHUB_BASE_REF);
-            const message = `PR #${prNum} em ${repoName}
-       <br>Da branch: <b>${process.env.GITHUB_HEAD_REF}</b>
-       <br>Para a branch: <b>${process.env.GITHUB_BASE_REF}</b>`;
-            const messageCard = yield message_card_1.createMessageCard(notificationSummary, notificationColor, author, authorName, message, prTitle, prUrl, prNum, repoName, branchTarget, branchDest, timestamp);
-            const adaptiveCard = yield adaptive_card_1.createAdaptiveCard(author, authorName, message, prTitle, prUrl, repoName, branchTarget, branchDest, prNum, timestamp);
+            const messageCard = yield message_card_1.createMessageCard(notificationSummary, notificationColor, author, authorName, prTitle, prUrl, prNum, repoName, branchTarget, branchDest, timestamp);
             axios_1.default
-                // .post(msTeamsWebhookUri, adaptiveCard)
                 .post(msTeamsWebhookUri, messageCard)
                 .then(function (response) {
-                console.log('Teste');
                 console.log(response);
                 core.debug(response.data);
             })
                 .catch(function (error) {
-                console.log('Erro');
                 console.log(error);
                 console.log('Erro');
                 core.debug(error);
@@ -15283,274 +15165,6 @@ module.exports = function httpAdapter(config) {
     }
   });
 };
-
-
-/***/ }),
-
-/***/ 676:
-/***/ (function(__unusedmodule, exports) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.createAdaptiveCard = void 0;
-function createAdaptiveCard(author, authorName, message, prTitle, prUrl, prNum, repoName, branchTarget, branchDest, timestamp) {
-    let avatar_url = 'https://www.gravatar.com/avatar/05b6d8cc7c662bf81e01b39254f88a48?d=identicon';
-    if (author) {
-        if (author.avatar_url) {
-            avatar_url = author.avatar_url;
-        }
-    }
-    const adaptiveCard = {
-        $schema: 'https://adaptivecards.io/schemas/adaptive-card.json',
-        type: 'AdaptiveCard',
-        version: '1.0',
-        body: [
-            {
-                type: 'TextBlock',
-                text: 'Teste'
-            },
-            {
-                type: 'Container',
-                items: [
-                    {
-                        type: 'TextBlock',
-                        text: 'prTitle',
-                        weight: 'bolder',
-                        size: 'medium'
-                    },
-                    {
-                        type: 'ColumnSet',
-                        columns: [
-                            {
-                                type: 'Column',
-                                width: 'auto',
-                                items: [
-                                    {
-                                        type: 'Image',
-                                        url: avatar_url,
-                                        size: 'small',
-                                        style: 'person'
-                                    }
-                                ]
-                            },
-                            {
-                                type: 'Column',
-                                width: 'stretch',
-                                items: [
-                                    {
-                                        type: 'TextBlock',
-                                        text: authorName,
-                                        weight: 'bolder',
-                                        wrap: true
-                                    },
-                                    {
-                                        type: 'TextBlock',
-                                        spacing: 'none',
-                                        text: 'Qyon - Time Gestão Fácil',
-                                        isSubtle: true,
-                                        wrap: true
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                type: 'Container',
-                items: [
-                    {
-                        type: 'TextBlock',
-                        text: message,
-                        wrap: true
-                    },
-                    {
-                        type: 'FactSet',
-                        facts: [
-                            {
-                                title: 'PR #:',
-                                value: prNum
-                            },
-                            {
-                                title: 'Repositório:',
-                                value: repoName
-                            },
-                            {
-                                title: 'Branch Origem:',
-                                value: branchTarget
-                            },
-                            {
-                                title: 'Branch Destino:',
-                                value: branchDest
-                            },
-                            {
-                                title: 'Data:',
-                                value: timestamp
-                            }
-                        ]
-                    }
-                ]
-            }
-        ],
-        potentialAction: [
-            {
-                '@context': 'http://schema.org',
-                target: [`${prUrl}`],
-                '@type': 'ViewAction',
-                name: 'Visualizar Pull Request'
-            }
-        ]
-    };
-    const teste = {
-        $schema: 'https://adaptivecards.io/schemas/adaptive-card.json',
-        type: 'AdaptiveCard',
-        version: '1.0',
-        body: [
-            {
-                type: 'TextBlock',
-                text: 'Teste'
-            },
-            {
-                type: 'Container',
-                items: [
-                    {
-                        type: 'TextBlock',
-                        text: 'Publish Adaptive Card schema',
-                        weight: 'bolder',
-                        size: 'medium'
-                    },
-                    {
-                        type: 'ColumnSet',
-                        columns: [
-                            {
-                                type: 'Column',
-                                width: 'auto',
-                                items: [
-                                    {
-                                        type: 'Image',
-                                        url: 'https://connectorsdemo.azurewebsites.net/images/MSC12_Oscar_002.jpg',
-                                        size: 'small',
-                                        style: 'person',
-                                        altText: "Migeul Garcia's Profile Picture"
-                                    }
-                                ]
-                            },
-                            {
-                                type: 'Column',
-                                width: 'stretch',
-                                items: [
-                                    {
-                                        type: 'TextBlock',
-                                        text: 'Miguel Garcia',
-                                        weight: 'bolder',
-                                        wrap: true
-                                    },
-                                    {
-                                        type: 'TextBlock',
-                                        spacing: 'none',
-                                        text: 'Created {{DATE(2017-02-14T06:08:39Z, SHORT)}}',
-                                        isSubtle: true,
-                                        wrap: true
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                type: 'Container',
-                items: [
-                    {
-                        type: 'TextBlock',
-                        text: 'Now that we have defined the main rules and features of the format, we need to produce a schema and publish it to GitHub. The schema will be the starting point of our reference documentation.',
-                        wrap: true
-                    },
-                    {
-                        type: 'FactSet',
-                        facts: [
-                            {
-                                title: 'Board:',
-                                value: 'Adaptive Card'
-                            },
-                            {
-                                title: 'List:',
-                                value: 'Backlog'
-                            },
-                            {
-                                title: 'Assigned to:',
-                                value: 'Matt Hidinger'
-                            },
-                            {
-                                title: 'Due date:',
-                                value: 'Not set'
-                            }
-                        ]
-                    }
-                ]
-            }
-        ],
-        actions: [
-            {
-                type: 'Action.ShowCard',
-                title: 'Set due date',
-                card: {
-                    type: 'AdaptiveCard',
-                    body: [
-                        {
-                            type: 'TextBlock',
-                            text: 'Teste2'
-                        },
-                        {
-                            type: 'Input.Date',
-                            id: 'dueDate',
-                            isRequired: true,
-                            placeholder: 'Enter due date'
-                        }
-                    ],
-                    actions: [
-                        {
-                            type: 'Action.Http',
-                            method: 'POST',
-                            body: '{{dueDate.value}}',
-                            title: 'OK',
-                            url: 'https://messagecardplaygroundfn.azurewebsites.net/'
-                        }
-                    ]
-                }
-            },
-            {
-                type: 'Action.ShowCard',
-                title: 'Comment',
-                card: {
-                    type: 'AdaptiveCard',
-                    body: [
-                        {
-                            type: 'Input.Text',
-                            id: 'comment',
-                            isRequired: true,
-                            isMultiline: true,
-                            placeholder: 'Enter your comment'
-                        }
-                    ],
-                    actions: [
-                        {
-                            type: 'Action.Http',
-                            method: 'POST',
-                            body: '{{comment.value}}',
-                            title: 'OK',
-                            url: 'https://messagecardplaygroundfn.azurewebsites.net/'
-                        }
-                    ]
-                }
-            }
-        ]
-    };
-    // return adaptiveCard
-    return teste;
-}
-exports.createAdaptiveCard = createAdaptiveCard;
 
 
 /***/ }),
