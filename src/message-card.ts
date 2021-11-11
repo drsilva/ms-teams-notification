@@ -23,13 +23,10 @@ export function createMessageCard(
     title: notificationSummary,
     sections: [
       {
-        activityTitle: `${prTitle}`,
+        activityTitle: `${authorName} [(@${author.login})](${author.html_url}) em ${timestamp}`,
         activityImage: avatar_url,
         activitySubtitle: 'Qyon - Time Gestão Fácil (ERP)',
-        text:
-          `${message}` +
-          `<br>` +
-          `Autor: <b>${authorName}</b> [(@${author.login})](${author.html_url}) em ${timestamp}`,
+        text: `${prTitle}`,
 
         facts: [
           {
