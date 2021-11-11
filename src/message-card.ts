@@ -172,6 +172,6 @@ export function createMessageCard(
       }
     ]
   }
-  // return messageCard
-  return teste
+  return messageCard
+  // return teste
 }
