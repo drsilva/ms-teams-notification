@@ -35,19 +35,19 @@ export function createMessageCard(
         facts: [
           {
             name: 'PR #:',
-            value: '2'
+            value: prNum
           },
           {
             name: 'Repositório:',
-            value: 'Repo'
+            value: repoName
           },
           {
             name: 'Branch Origem:',
-            value: 'origem'
+            value: branchTarget
           },
           {
             name: 'Branch Destino:',
-            value: 'destino'
+            value: branchDest
           },
           {
             name: 'Due date:',
