@@ -2441,12 +2441,7 @@ module.exports = require("child_process");
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createMessageCard = void 0;
-function createMessageCard(notificationSummary, notificationColor, author, authorName, message, prTitle, prUrl, 
-// prNum: string,
-// repoName: string,
-// branchTarget: string,
-// branchDest: string,
-timestamp) {
+function createMessageCard(notificationSummary, notificationColor, author, authorName, message, prTitle, prUrl, timestamp) {
     let avatar_url = 'https://www.gravatar.com/avatar/05b6d8cc7c662bf81e01b39254f88a48?d=identicon';
     if (author) {
         if (author.avatar_url) {
@@ -2467,24 +2462,20 @@ timestamp) {
                 text: `${prTitle}`,
                 facts: [
                     {
-                        title: 'PR #:',
-                        value: 'prNum'
+                        name: 'Board:',
+                        value: 'Name of board'
                     },
                     {
-                        title: 'Repositório:',
-                        value: 'repoName'
+                        name: 'List:',
+                        value: 'Name of list'
                     },
                     {
-                        title: 'Branch Origem:',
-                        value: 'branchTarget'
+                        name: 'Assigned to:',
+                        value: '(none)'
                     },
                     {
-                        title: 'Branch Destino:',
-                        value: 'branchDest'
-                    },
-                    {
-                        title: 'Data:',
-                        value: 'timestamp'
+                        name: 'Due date:',
+                        value: timestamp
                     }
                 ]
             }

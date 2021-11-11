@@ -6,10 +6,6 @@ export function createMessageCard(
   message: string,
   prTitle: string,
   prUrl: string,
-  // prNum: string,
-  // repoName: string,
-  // branchTarget: string,
-  // branchDest: string,
   timestamp: string
 ): any {
   let avatar_url =
@@ -34,24 +30,20 @@ export function createMessageCard(
 
         facts: [
           {
-            title: 'PR #:',
-            value: 'prNum'
+            name: 'Board:',
+            value: 'Name of board'
           },
           {
-            title: 'Repositório:',
-            value: 'repoName'
+            name: 'List:',
+            value: 'Name of list'
           },
           {
-            title: 'Branch Origem:',
-            value: 'branchTarget'
+            name: 'Assigned to:',
+            value: '(none)'
           },
           {
-            title: 'Branch Destino:',
-            value: 'branchDest'
-          },
-          {
-            title: 'Data:',
-            value: 'timestamp'
+            name: 'Due date:',
+            value: timestamp
           }
         ]
       }
