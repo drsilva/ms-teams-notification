@@ -6,6 +6,10 @@ export function createMessageCard(
   message: string,
   prTitle: string,
   prUrl: string,
+  prNum: string,
+  repoName: string,
+  branchTarget: string,
+  branchDest: string,
   timestamp: string
 ): any {
   let avatar_url =
@@ -23,29 +27,34 @@ export function createMessageCard(
     title: notificationSummary,
     sections: [
       {
-        activityTitle: `${prTitle}`,
+        activityTitle: `${authorName} [(@${author.login})](${author.html_url})`,
+        activitySubtitle: 'Qyon - Time Gestão Fácil (ERP)',
         activityImage: avatar_url,
-        text:
-          `${message}` +
-          `<br>` +
-          `Autor: <b>${authorName}</b> [(@${author.login})](${author.html_url}) em ${timestamp}`,
+        text: prTitle,
+        // `${message}` +
+        // `<br>` +
+        // `Autor: <b>${authorName}</b> [(@${author.login})](${author.html_url}) em ${timestamp}`,
 
         facts: [
           {
-            name: 'Board:',
-            value: 'Name of board'
+            title: 'PR #:',
+            value: prNum
           },
           {
-            name: 'List:',
-            value: 'Name of list'
+            title: 'Repositório:',
+            value: repoName
           },
           {
-            name: 'Assigned to:',
-            value: '(none)'
+            title: 'Branch Origem:',
+            value: branchTarget
           },
           {
-            name: 'Due date:',
-            value: '(none)'
+            title: 'Branch Destino:',
+            value: branchDest
+          },
+          {
+            title: 'Data:',
+            value: timestamp
           }
         ]
       }
@@ -173,5 +182,4 @@ export function createMessageCard(
     ]
   }
   return messageCard
-  // return teste
 }

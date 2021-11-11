@@ -60,6 +60,10 @@ async function run(): Promise<void> {
       message,
       prTitle,
       prUrl,
+      prNum,
+      repoName,
+      branchTarget,
+      branchDest,
       timestamp
     )
 
