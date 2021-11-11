@@ -2462,16 +2462,20 @@ function createMessageCard(notificationSummary, notificationColor, author, autho
                 text: `${prTitle}`,
                 facts: [
                     {
-                        name: 'Board:',
-                        value: 'Name of board'
+                        name: 'PR #:',
+                        value: '1'
                     },
                     {
-                        name: 'List:',
-                        value: 'Name of list'
+                        name: 'Repositório:',
+                        value: 'Repo'
                     },
                     {
-                        name: 'Assigned to:',
-                        value: '(none)'
+                        name: 'Branch Origem:',
+                        value: 'origem'
+                    },
+                    {
+                        name: 'Branch Destino:',
+                        value: 'destino'
                     },
                     {
                         name: 'Due date:',
