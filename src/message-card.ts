@@ -28,7 +28,7 @@ export function createMessageCard(
     sections: [
       {
         activityTitle: `${authorName} [(@${author.login})](${author.html_url})`,
-        activitySubtitle: 'Qyon - Time Gestão Fácil (ERP)',
+        // activitySubtitle: 'Qyon - Time Gestão Fácil (ERP)',
         activityImage: `${avatar_url}`,
         text: `${prTitle}`,
         // `${message}` +

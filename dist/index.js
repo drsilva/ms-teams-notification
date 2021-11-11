@@ -2457,7 +2457,7 @@ function createMessageCard(notificationSummary, notificationColor, author, autho
         sections: [
             {
                 activityTitle: `${authorName} [(@${author.login})](${author.html_url})`,
-                activitySubtitle: "Qyon - Time Gestão Fácil (ERP)",
+                // activitySubtitle: 'Qyon - Time Gestão Fácil (ERP)',
                 activityImage: `${avatar_url}`,
                 text: `${prTitle}`,
                 // `${message}` +
