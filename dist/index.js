@@ -2441,7 +2441,7 @@ module.exports = require("child_process");
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createMessageCard = void 0;
-function createMessageCard(notificationSummary, notificationColor, author, authorName, message, prTitle, prUrl, prNum, repoName, branchTarget, branchDest, timestamp) {
+function createMessageCard(notificationSummary, notificationColor, author, authorName, message, prTitle, prUrl, timestamp) {
     let avatar_url = 'https://www.gravatar.com/avatar/05b6d8cc7c662bf81e01b39254f88a48?d=identicon';
     if (author) {
         if (author.avatar_url) {
@@ -2456,33 +2456,28 @@ function createMessageCard(notificationSummary, notificationColor, author, autho
         title: notificationSummary,
         sections: [
             {
-                activityTitle: `${authorName} [(@${author.login})](${author.html_url})`,
-                // activitySubtitle: 'Qyon - Time Gestão Fácil (ERP)',
-                activityImage: `${avatar_url}`,
-                text: `${prTitle}`,
-                // `${message}` +
-                // `<br>` +
-                // `Autor: <b>${authorName}</b> [(@${author.login})](${author.html_url}) em ${timestamp}`,
+                activityTitle: `${prTitle}`,
+                activityImage: avatar_url,
+                activitySubtitle: "Qyon - Time Gestão Fácil (ERP)",
+                text: `${message}` +
+                    `<br>` +
+                    `Autor: <b>${authorName}</b> [(@${author.login})](${author.html_url}) em ${timestamp}`,
                 facts: [
                     {
-                        title: 'PR #:',
-                        value: prNum
+                        name: 'Board:',
+                        value: 'Name of board'
                     },
                     {
-                        title: 'Repositório:',
-                        value: repoName
+                        name: 'List:',
+                        value: 'Name of list'
                     },
                     {
-                        title: 'Branch Origem:',
-                        value: branchTarget
+                        name: 'Assigned to:',
+                        value: '(none)'
                     },
                     {
-                        title: 'Branch Destino:',
-                        value: branchDest
-                    },
-                    {
-                        title: 'Data:',
-                        value: timestamp
+                        name: 'Due date:',
+                        value: '(none)'
                     }
                 ]
             }
@@ -2493,6 +2488,116 @@ function createMessageCard(notificationSummary, notificationColor, author, autho
                 target: [`${prUrl}`],
                 '@type': 'ViewAction',
                 name: 'Visualizar Pull Request'
+            }
+        ]
+    };
+    const teste = {
+        '@type': 'MessageCard',
+        '@context': 'https://schema.org/extensions',
+        summary: 'Card "Test card"',
+        themeColor: '0078D7',
+        title: 'Card created: "Name of card"',
+        sections: [
+            {
+                activityTitle: 'Miguel Garcia',
+                activitySubtitle: '9/13/2016, 3:34pm',
+                activityImage: 'https://connectorsdemo.azurewebsites.net/images/MSC12_Oscar_002.jpg',
+                facts: [
+                    {
+                        name: 'Board:',
+                        value: 'Name of board'
+                    },
+                    {
+                        name: 'List:',
+                        value: 'Name of list'
+                    },
+                    {
+                        name: 'Assigned to:',
+                        value: '(none)'
+                    },
+                    {
+                        name: 'Due date:',
+                        value: '(none)'
+                    }
+                ],
+                text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+            }
+        ],
+        potentialAction: [
+            {
+                '@type': 'ActionCard',
+                name: 'Set due date',
+                inputs: [
+                    {
+                        '@type': 'DateInput',
+                        id: 'dueDate',
+                        title: 'Select a date'
+                    }
+                ],
+                actions: [
+                    {
+                        '@type': 'HttpPOST',
+                        name: 'OK',
+                        target: 'http://...'
+                    }
+                ]
+            },
+            {
+                '@type': 'ActionCard',
+                name: 'Move',
+                inputs: [
+                    {
+                        '@type': 'MultichoiceInput',
+                        id: 'move',
+                        title: 'Pick a list',
+                        choices: [
+                            {
+                                display: 'List 1',
+                                value: 'l1'
+                            },
+                            {
+                                display: 'List 2',
+                                value: 'l2'
+                            }
+                        ]
+                    }
+                ],
+                actions: [
+                    {
+                        '@type': 'HttpPOST',
+                        name: 'OK',
+                        target: 'http://...'
+                    }
+                ]
+            },
+            {
+                '@type': 'ActionCard',
+                name: 'Add a comment',
+                inputs: [
+                    {
+                        '@type': 'TextInput',
+                        id: 'comment',
+                        isMultiline: true,
+                        title: 'Enter your comment'
+                    }
+                ],
+                actions: [
+                    {
+                        '@type': 'HttpPOST',
+                        name: 'OK',
+                        target: 'http://...'
+                    }
+                ]
+            },
+            {
+                '@type': 'OpenUri',
+                name: 'View in Trello',
+                targets: [
+                    {
+                        os: 'default',
+                        uri: 'http://...'
+                    }
+                ]
             }
         ]
     };
@@ -3115,7 +3220,12 @@ function run() {
             const message = `PR #${prNum} em ${repoName}
        <br>Da branch: <b>${process.env.GITHUB_HEAD_REF}</b>
        <br>Para a branch: <b>${process.env.GITHUB_BASE_REF}</b>`;
-            const messageCard = yield message_card_1.createMessageCard(notificationSummary, notificationColor, author, authorName, message, prTitle, prUrl, prNum, repoName, branchTarget, branchDest, timestamp);
+            const messageCard = yield message_card_1.createMessageCard(notificationSummary, notificationColor, author, authorName, message, prTitle, prUrl, 
+            // prNum,
+            // repoName,
+            // branchTarget,
+            // branchDest,
+            timestamp);
             const adaptiveCard = yield adaptive_card_1.createAdaptiveCard(author, authorName, message, prTitle, prUrl, repoName, branchTarget, branchDest, prNum, timestamp);
             axios_1.default
                 // .post(msTeamsWebhookUri, adaptiveCard)
