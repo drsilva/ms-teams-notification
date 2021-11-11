@@ -2434,6 +2434,78 @@ module.exports = require("child_process");
 
 /***/ }),
 
+/***/ 131:
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.createMessageCard = void 0;
+function createMessageCard(notificationSummary, notificationColor, author, authorName, message, prTitle, prUrl, timestamp) {
+    let avatar_url = 'https://www.gravatar.com/avatar/05b6d8cc7c662bf81e01b39254f88a48?d=identicon';
+    if (author) {
+        if (author.avatar_url) {
+            avatar_url = author.avatar_url;
+        }
+    }
+    const messageCard = {
+        '@type': 'MessageCard',
+        '@context': 'https://schema.org/extensions',
+        summary: notificationSummary,
+        themeColor: notificationColor,
+        title: notificationSummary,
+        items: [
+            {
+                type: 'FactSet',
+                facts: [
+                    {
+                        title: 'PR #:',
+                        value: 'prNum'
+                    },
+                    {
+                        title: 'Repositório:',
+                        value: 'repoName'
+                    },
+                    {
+                        title: 'Branch Origem:',
+                        value: 'branchTarget'
+                    },
+                    {
+                        title: 'Branch Destino:',
+                        value: 'branchDest'
+                    },
+                    {
+                        title: 'Data:',
+                        value: timestamp
+                    }
+                ]
+            }
+        ],
+        sections: [
+            {
+                activityTitle: `${prTitle}`,
+                activityImage: avatar_url,
+                activityText: `${message}` +
+                    `<br>` +
+                    `Autor: <b>${authorName}</b> [(@${author.login})](${author.html_url}) em ${timestamp}`
+            }
+        ],
+        potentialAction: [
+            {
+                '@context': 'http://schema.org',
+                target: [`${prUrl}`],
+                '@type': 'ViewAction',
+                name: 'Visualizar Pull Request'
+            }
+        ]
+    };
+    return messageCard;
+}
+exports.createMessageCard = createMessageCard;
+
+
+/***/ }),
+
 /***/ 133:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
@@ -3006,6 +3078,7 @@ const core = __importStar(__webpack_require__(470));
 const rest_1 = __webpack_require__(889);
 const axios_1 = __importDefault(__webpack_require__(53));
 const moment_timezone_1 = __importDefault(__webpack_require__(717));
+const message_card_1 = __webpack_require__(131);
 const adaptive_card_1 = __webpack_require__(676);
 const escapeMarkdownTokens = (text) => text
     .replace(/\n\ {1,}/g, '\n ')
@@ -3045,9 +3118,11 @@ function run() {
             const message = `PR #${prNum} em ${repoName}
        <br>Da branch: <b>${process.env.GITHUB_HEAD_REF}</b>
        <br>Para a branch: <b>${process.env.GITHUB_BASE_REF}</b>`;
+            const messageCard = yield message_card_1.createMessageCard(notificationSummary, notificationColor, author, authorName, message, prTitle, prUrl, timestamp);
             const adaptiveCard = yield adaptive_card_1.createAdaptiveCard(author, authorName, message, prTitle, prUrl, repoName, branchTarget, branchDest, prNum, timestamp);
             axios_1.default
-                .post(msTeamsWebhookUri, adaptiveCard)
+                // .post(msTeamsWebhookUri, adaptiveCard)
+                .post(msTeamsWebhookUri, messageCard)
                 .then(function (response) {
                 console.log('Teste');
                 console.log(response);

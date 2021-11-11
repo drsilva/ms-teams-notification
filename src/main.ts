@@ -52,6 +52,17 @@ async function run(): Promise<void> {
        <br>Da branch: <b>${process.env.GITHUB_HEAD_REF}</b>
        <br>Para a branch: <b>${process.env.GITHUB_BASE_REF}</b>`
 
+    const messageCard = await createMessageCard(
+      notificationSummary,
+      notificationColor,
+      author,
+      authorName,
+      message,
+      prTitle,
+      prUrl,
+      timestamp
+    )
+
     const adaptiveCard = await createAdaptiveCard(
       author,
       authorName,
@@ -66,7 +77,8 @@ async function run(): Promise<void> {
     )
 
     axios
-      .post(msTeamsWebhookUri, adaptiveCard)
+      // .post(msTeamsWebhookUri, adaptiveCard)
+      .post(msTeamsWebhookUri, messageCard)
       .then(function(response) {
         console.log('Teste')
         console.log(response)
