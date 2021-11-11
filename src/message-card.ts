@@ -25,29 +25,29 @@ export function createMessageCard(
       {
         activityTitle: `${prTitle}`,
         activityImage: avatar_url,
-        activityText:
+        text:
           `${message}` +
           `<br>` +
           `Autor: <b>${authorName}</b> [(@${author.login})](${author.html_url}) em ${timestamp}`,
           
-        facts: [
+        "facts": [
           {
-            title: 'Board:',
-            value: 'Adaptive Card'
+            "name": "Board:",
+            "value": "Name of board"
           },
           {
-            title: 'List:',
-            value: 'Backlog'
+            "name": "List:",
+            "value": "Name of list"
           },
           {
-            title: 'Assigned to:',
-            value: 'Matt Hidinger'
+            "name": "Assigned to:",
+            "value": "(none)"
           },
           {
-            title: 'Due date:',
-            value: 'Not set'
+            "name": "Due date:",
+            "value": "(none)"
           }
-        ]
+        ],
 
       }
     ],
