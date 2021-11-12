@@ -30,8 +30,7 @@ export function createMessageCard(
         activityTitle: `${authorName} [(@${author.login})](${author.html_url})`,
         activityImage: avatar_url,
         activitySubtitle: 'Qyon - Time Gestão Fácil (ERP)',
-        // text: [prTitle, prDescription].filter(Boolean).join('<br>'),
-        text: prTitle + '---' + prDescription,
+        text: [prTitle, prDescription].filter(Boolean).join('<br>'),
         facts: [
           {
             name: 'PR #:',
