@@ -2448,6 +2448,7 @@ function createMessageCard(qyonTime, notificationSummary, notificationColor, aut
             avatar_url = author.avatar_url;
         }
     }
+    prDescription = prDescription.replace(/\n/g, "<br />");
     const messageCard = {
         '@type': 'MessageCard',
         '@context': 'https://schema.org/extensions',
@@ -3111,7 +3112,8 @@ function run() {
             const authorName = commit.data.commit.author.name;
             const branchTarget = String(process.env.GITHUB_HEAD_REF);
             const branchDest = String(process.env.GITHUB_BASE_REF);
-            const notificationSummary = core.getInput('notification-summary') || `Novo PR em ${repoName} para ${branchDest}`;
+            const notificationSummary = core.getInput('notification-summary') ||
+                `Novo PR em ${repoName} para ${branchDest}`;
             const messageCard = yield message_card_1.createMessageCard(qyonTime, notificationSummary, notificationColor, author, authorName, prTitle, prDescription, prUrl, prNum, repoName, branchTarget, branchDest, timestamp);
             axios_1.default
                 .post(msTeamsWebhookUri, messageCard)

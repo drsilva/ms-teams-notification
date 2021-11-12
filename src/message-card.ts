@@ -20,6 +20,7 @@ export function createMessageCard(
       avatar_url = author.avatar_url
     }
   }
+  prDescription = prDescription.replace(/\n/g, '<br />')
   const messageCard = {
     '@type': 'MessageCard',
     '@context': 'https://schema.org/extensions',
