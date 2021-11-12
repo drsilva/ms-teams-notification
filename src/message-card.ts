@@ -1,4 +1,5 @@
 export function createMessageCard(
+  qyonTime: string,
   notificationSummary: string,
   notificationColor: string,
   author: any,
@@ -29,24 +30,24 @@ export function createMessageCard(
       {
         activityTitle: `${authorName} [(@${author.login})](${author.html_url})`,
         activityImage: avatar_url,
-        activitySubtitle: 'Qyon - Time Gestão Fácil (ERP)',
+        activitySubtitle: qyonTime,
         text: [prTitle, prDescription].filter(Boolean).join('<br>'),
         facts: [
           {
-            name: 'PR #:',
-            value: prNum
-          },
-          {
             name: 'Repositório:',
             value: repoName
+          },
+          {
+            name: 'Branch Destino:',
+            value: branchDest
           },
           {
             name: 'Branch Origem:',
             value: branchTarget
           },
           {
-            name: 'Branch Destino:',
-            value: branchDest
+            name: 'PR #:',
+            value: prNum
           },
           {
             name: 'Data:',

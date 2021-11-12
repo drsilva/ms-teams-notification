@@ -2441,7 +2441,7 @@ module.exports = require("child_process");
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createMessageCard = void 0;
-function createMessageCard(notificationSummary, notificationColor, author, authorName, prTitle, prDescription, prUrl, prNum, repoName, branchTarget, branchDest, timestamp) {
+function createMessageCard(qyonTime, notificationSummary, notificationColor, author, authorName, prTitle, prDescription, prUrl, prNum, repoName, branchTarget, branchDest, timestamp) {
     let avatar_url = 'https://www.gravatar.com/avatar/05b6d8cc7c662bf81e01b39254f88a48?d=identicon';
     if (author) {
         if (author.avatar_url) {
@@ -2458,24 +2458,24 @@ function createMessageCard(notificationSummary, notificationColor, author, autho
             {
                 activityTitle: `${authorName} [(@${author.login})](${author.html_url})`,
                 activityImage: avatar_url,
-                activitySubtitle: 'Qyon - Time Gestão Fácil (ERP)',
+                activitySubtitle: qyonTime,
                 text: [prTitle, prDescription].filter(Boolean).join('<br>'),
                 facts: [
                     {
-                        name: 'PR #:',
-                        value: prNum
-                    },
-                    {
                         name: 'Repositório:',
                         value: repoName
+                    },
+                    {
+                        name: 'Branch Destino:',
+                        value: branchDest
                     },
                     {
                         name: 'Branch Origem:',
                         value: branchTarget
                     },
                     {
-                        name: 'Branch Destino:',
-                        value: branchDest
+                        name: 'PR #:',
+                        value: prNum
                     },
                     {
                         name: 'Data:',
@@ -3088,9 +3088,9 @@ function run() {
             const msTeamsWebhookUri = core.getInput('ms-teams-webhook-uri', {
                 required: true
             });
-            const notificationSummary = core.getInput('notification-summary') || 'GitHub Action Notification';
-            const notificationColor = core.getInput('notification-color') || '0b93ff';
-            const timezone = core.getInput('timezone') || 'UTC';
+            const qyonTime = core.getInput('notification-color') || 'Qyon - Time Gestão Fácil (ERP)';
+            const notificationColor = core.getInput('notification-color') || '067ef5';
+            const timezone = core.getInput('timezone') || 'America/Sao_Paulo';
             const prNum = core.getInput('pull-request-number', { required: true });
             const prTitle = core.getInput('pull-request-title', { required: true });
             const prDescription = core.getInput('pull-request-description', {
@@ -3111,7 +3111,8 @@ function run() {
             const authorName = commit.data.commit.author.name;
             const branchTarget = String(process.env.GITHUB_HEAD_REF);
             const branchDest = String(process.env.GITHUB_BASE_REF);
-            const messageCard = yield message_card_1.createMessageCard(notificationSummary, notificationColor, author, authorName, prTitle, prDescription, prUrl, prNum, repoName, branchTarget, branchDest, timestamp);
+            const notificationSummary = core.getInput('notification-summary') || `Novo PR em ${repoName} para ${branchDest}`;
+            const messageCard = yield message_card_1.createMessageCard(qyonTime, notificationSummary, notificationColor, author, authorName, prTitle, prDescription, prUrl, prNum, repoName, branchTarget, branchDest, timestamp);
             axios_1.default
                 .post(msTeamsWebhookUri, messageCard)
                 .then(function (response) {

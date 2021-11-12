@@ -21,10 +21,10 @@ async function run(): Promise<void> {
       required: true
     })
 
-    const notificationSummary =
-      core.getInput('notification-summary') || 'GitHub Action Notification'
-    const notificationColor = core.getInput('notification-color') || '0b93ff'
-    const timezone = core.getInput('timezone') || 'UTC'
+    const qyonTime =
+      core.getInput('notification-color') || 'Qyon - Time Gestão Fácil (ERP)'
+    const notificationColor = core.getInput('notification-color') || '067ef5'
+    const timezone = core.getInput('timezone') || 'America/Sao_Paulo'
     const prNum = core.getInput('pull-request-number', {required: true})
     const prTitle = core.getInput('pull-request-title', {required: true})
     const prDescription = core.getInput('pull-request-description', {
@@ -50,7 +50,12 @@ async function run(): Promise<void> {
     const branchTarget = String(process.env.GITHUB_HEAD_REF)
     const branchDest = String(process.env.GITHUB_BASE_REF)
 
+    const notificationSummary =
+      core.getInput('notification-summary') ||
+      `Novo PR em ${repoName} para ${branchDest}`
+
     const messageCard = await createMessageCard(
+      qyonTime,
       notificationSummary,
       notificationColor,
       author,
