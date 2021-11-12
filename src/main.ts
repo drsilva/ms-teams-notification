@@ -27,6 +27,9 @@ async function run(): Promise<void> {
     const timezone = core.getInput('timezone') || 'UTC'
     const prNum = core.getInput('pull-request-number', {required: true})
     const prTitle = core.getInput('pull-request-title', {required: true})
+    const prDescription = core.getInput('pull-request-description', {
+      required: false
+    })
     const prUrl = core.getInput('pull-request-url', {required: true})
 
     const dateFormat = 'DD/MM/YYYY HH:mm'
@@ -53,6 +56,7 @@ async function run(): Promise<void> {
       author,
       authorName,
       prTitle,
+      prDescription,
       prUrl,
       prNum,
       repoName,

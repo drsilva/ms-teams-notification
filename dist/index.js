@@ -2441,7 +2441,7 @@ module.exports = require("child_process");
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createMessageCard = void 0;
-function createMessageCard(notificationSummary, notificationColor, author, authorName, prTitle, prUrl, prNum, repoName, branchTarget, branchDest, timestamp) {
+function createMessageCard(notificationSummary, notificationColor, author, authorName, prTitle, prDescription, prUrl, prNum, repoName, branchTarget, branchDest, timestamp) {
     let avatar_url = 'https://www.gravatar.com/avatar/05b6d8cc7c662bf81e01b39254f88a48?d=identicon';
     if (author) {
         if (author.avatar_url) {
@@ -2459,7 +2459,7 @@ function createMessageCard(notificationSummary, notificationColor, author, autho
                 activityTitle: `${authorName} [(@${author.login})](${author.html_url})`,
                 activityImage: avatar_url,
                 activitySubtitle: 'Qyon - Time Gestão Fácil (ERP)',
-                text: `${prTitle}`,
+                text: [prTitle, prDescription].filter(Boolean).join('<br>'),
                 facts: [
                     {
                         name: 'PR #:',
@@ -3093,6 +3093,9 @@ function run() {
             const timezone = core.getInput('timezone') || 'UTC';
             const prNum = core.getInput('pull-request-number', { required: true });
             const prTitle = core.getInput('pull-request-title', { required: true });
+            const prDescription = core.getInput('pull-request-description', {
+                required: false
+            });
             const prUrl = core.getInput('pull-request-url', { required: true });
             const dateFormat = 'DD/MM/YYYY HH:mm';
             const timestamp = moment_timezone_1.default()
@@ -3108,7 +3111,7 @@ function run() {
             const authorName = commit.data.commit.author.name;
             const branchTarget = String(process.env.GITHUB_HEAD_REF);
             const branchDest = String(process.env.GITHUB_BASE_REF);
-            const messageCard = yield message_card_1.createMessageCard(notificationSummary, notificationColor, author, authorName, prTitle, prUrl, prNum, repoName, branchTarget, branchDest, timestamp);
+            const messageCard = yield message_card_1.createMessageCard(notificationSummary, notificationColor, author, authorName, prTitle, prDescription, prUrl, prNum, repoName, branchTarget, branchDest, timestamp);
             axios_1.default
                 .post(msTeamsWebhookUri, messageCard)
                 .then(function (response) {

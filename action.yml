@@ -26,6 +26,9 @@ inputs:
   pull-request-title:
       description: 'Pull Request Title'
       required: true
+  pull-request-description:
+      description: 'Pull Request Description'
+      required: false
   pull-request-url:
       description: 'Pull Request Url'
       required: true
