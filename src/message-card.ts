@@ -1,3 +1,5 @@
+import { stringify } from "querystring"
+
 export function createMessageCard(
   qyonTime: string,
   notificationSummary: string,
@@ -11,6 +13,7 @@ export function createMessageCard(
   repoName: string,
   branchTarget: string,
   branchDest: string,
+  reviwers: string,
   timestamp: string
 ): any {
   let avatar_url =
@@ -21,6 +24,36 @@ export function createMessageCard(
     }
   }
   prDescription = prDescription.replace(/\n/g, '<br />')
+
+  let sectionMain: any = {
+    activityTitle: `${authorName} [(@${author.login})](${author.html_url})`,
+    activityImage: avatar_url,
+    activitySubtitle: qyonTime,
+    text: [prTitle, prDescription].filter(Boolean).join('<br>'),
+    facts: [
+      {
+        name: 'Repositório:',
+        value: repoName
+      },
+      {
+        name: 'Branch Destino:',
+        value: branchDest
+      },
+      {
+        name: 'Branch Origem:',
+        value: branchTarget
+      },
+      {
+        name: 'PR #:',
+        value: prNum
+      },
+      {
+        name: 'Data:',
+        value: timestamp
+      }
+    ]
+  }
+  
   const messageCard = {
     '@type': 'MessageCard',
     '@context': 'https://schema.org/extensions',
@@ -28,34 +61,7 @@ export function createMessageCard(
     themeColor: notificationColor,
     title: notificationSummary,
     sections: [
-      {
-        activityTitle: `${authorName} [(@${author.login})](${author.html_url})`,
-        activityImage: avatar_url,
-        activitySubtitle: qyonTime,
-        text: [prTitle, prDescription].filter(Boolean).join('<br>'),
-        facts: [
-          {
-            name: 'Repositório:',
-            value: repoName
-          },
-          {
-            name: 'Branch Destino:',
-            value: branchDest
-          },
-          {
-            name: 'Branch Origem:',
-            value: branchTarget
-          },
-          {
-            name: 'PR #:',
-            value: prNum
-          },
-          {
-            name: 'Data:',
-            value: timestamp
-          }
-        ]
-      }
+      sectionMain   
     ],
     potentialAction: [
       {
@@ -65,6 +71,15 @@ export function createMessageCard(
         name: 'Visualizar Pull Request'
       }
     ]
+  }
+
+  if (reviwers) {
+    let sectReviwers: any = {
+      activityTitle: 'Revisores',        
+      text: String(`${reviwers}`),
+    }  
+    
+    messageCard.sections.push(sectReviwers);
   }
 
   return messageCard

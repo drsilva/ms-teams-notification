@@ -26,11 +26,10 @@ async function run(): Promise<void> {
     const notificationColor = core.getInput('notification-color') || '067ef5'
     const timezone = core.getInput('timezone') || 'America/Sao_Paulo'
     const prNum = core.getInput('pull-request-number', {required: true})
-    const prTitle = core.getInput('pull-request-title', {required: true})
-    const prDescription = core.getInput('pull-request-description', {
-      required: false
-    })
+    const prTitle = core.getInput('pull-request-title', {required: true})    
+    const prDescription = core.getInput('pull-request-description', {required: false})
     const prUrl = core.getInput('pull-request-url', {required: true})
+    const reviwers = core.getInput('reviwers', {required: false})
 
     const dateFormat = 'DD/MM/YYYY HH:mm'
 
@@ -67,6 +66,7 @@ async function run(): Promise<void> {
       repoName,
       branchTarget,
       branchDest,
+      reviwers,
       timestamp
     )
 
