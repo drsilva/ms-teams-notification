@@ -68,8 +68,12 @@ export function createMessageCard(
     themeColor: notificationColor,
     title: notificationSummary,
     sections: [
-      sectionMain,
-      sectReviwers
+      {
+        activityTitle: 'Sessão 1',
+      },
+      {
+        activityTitle: 'Sessão 2',
+      }  
     ],
     potentialAction: [
       {
