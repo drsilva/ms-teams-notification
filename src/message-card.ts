@@ -54,6 +54,13 @@ export function createMessageCard(
     ]
   }
   
+
+  let sectReviwers: any = {
+    activityTitle: 'Revisores',        
+    text: String(`${reviwers}`)
+  }   
+
+
   const messageCard = {
     '@type': 'MessageCard',
     '@context': 'https://schema.org/extensions',
@@ -61,7 +68,8 @@ export function createMessageCard(
     themeColor: notificationColor,
     title: notificationSummary,
     sections: [
-      sectionMain   
+      sectionMain,
+      sectReviwers
     ],
     potentialAction: [
       {
@@ -74,12 +82,9 @@ export function createMessageCard(
   }
 
   //if (reviwers) {
-    let sectReviwers: any = {
-      activityTitle: 'Revisores',        
-      text: String(`${reviwers}`)
-    }     
+      
     
-    messageCard.sections.push(sectReviwers);
+   // messageCard.sections.push(sectReviwers);
   //}
 
   return messageCard
