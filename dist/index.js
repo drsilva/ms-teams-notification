@@ -2441,14 +2441,42 @@ module.exports = require("child_process");
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createMessageCard = void 0;
-function createMessageCard(qyonTime, notificationSummary, notificationColor, author, authorName, prTitle, prDescription, prUrl, prNum, repoName, branchTarget, branchDest, timestamp) {
+function createMessageCard(qyonTime, notificationSummary, notificationColor, author, authorName, prTitle, prDescription, prUrl, prNum, repoName, branchTarget, branchDest, reviwers, timestamp) {
     let avatar_url = 'https://www.gravatar.com/avatar/05b6d8cc7c662bf81e01b39254f88a48?d=identicon';
     if (author) {
         if (author.avatar_url) {
             avatar_url = author.avatar_url;
         }
     }
-    prDescription = prDescription.replace(/\n/g, "<br />");
+    prDescription = prDescription.replace(/\n/g, '<br />');
+    let sectionMain = {
+        activityTitle: `${authorName} [(@${author.login})](${author.html_url})`,
+        activityImage: avatar_url,
+        activitySubtitle: qyonTime,
+        text: [prTitle, prDescription].filter(Boolean).join('<br>'),
+        facts: [
+            {
+                name: 'Repositório:',
+                value: repoName
+            },
+            {
+                name: 'Branch Destino:',
+                value: branchDest
+            },
+            {
+                name: 'Branch Origem:',
+                value: branchTarget
+            },
+            {
+                name: 'PR #:',
+                value: prNum
+            },
+            {
+                name: 'Data:',
+                value: timestamp
+            }
+        ]
+    };
     const messageCard = {
         '@type': 'MessageCard',
         '@context': 'https://schema.org/extensions',
@@ -2456,34 +2484,7 @@ function createMessageCard(qyonTime, notificationSummary, notificationColor, aut
         themeColor: notificationColor,
         title: notificationSummary,
         sections: [
-            {
-                activityTitle: `${authorName} [(@${author.login})](${author.html_url})`,
-                activityImage: avatar_url,
-                activitySubtitle: qyonTime,
-                text: [prTitle, prDescription].filter(Boolean).join('<br>'),
-                facts: [
-                    {
-                        name: 'Repositório:',
-                        value: repoName
-                    },
-                    {
-                        name: 'Branch Destino:',
-                        value: branchDest
-                    },
-                    {
-                        name: 'Branch Origem:',
-                        value: branchTarget
-                    },
-                    {
-                        name: 'PR #:',
-                        value: prNum
-                    },
-                    {
-                        name: 'Data:',
-                        value: timestamp
-                    }
-                ]
-            }
+            sectionMain
         ],
         potentialAction: [
             {
@@ -2494,6 +2495,13 @@ function createMessageCard(qyonTime, notificationSummary, notificationColor, aut
             }
         ]
     };
+    if (reviwers) {
+        let sectReviwers = {
+            activityTitle: 'Revisores',
+            text: `${reviwers}`
+        };
+        messageCard.sections.push(sectReviwers);
+    }
     return messageCard;
 }
 exports.createMessageCard = createMessageCard;
@@ -3098,6 +3106,7 @@ function run() {
                 required: false
             });
             const prUrl = core.getInput('pull-request-url', { required: true });
+            const reviwers = core.getInput('reviwers', { required: false });
             const dateFormat = 'DD/MM/YYYY HH:mm';
             const timestamp = moment_timezone_1.default()
                 .tz(timezone)
@@ -3114,7 +3123,7 @@ function run() {
             const branchDest = String(process.env.GITHUB_BASE_REF);
             const notificationSummary = core.getInput('notification-summary') ||
                 `Novo PR em ${repoName} para ${branchDest}`;
-            const messageCard = yield message_card_1.createMessageCard(qyonTime, notificationSummary, notificationColor, author, authorName, prTitle, prDescription, prUrl, prNum, repoName, branchTarget, branchDest, timestamp);
+            const messageCard = yield message_card_1.createMessageCard(qyonTime, notificationSummary, notificationColor, author, authorName, prTitle, prDescription, prUrl, prNum, repoName, branchTarget, branchDest, reviwers, timestamp);
             axios_1.default
                 .post(msTeamsWebhookUri, messageCard)
                 .then(function (response) {

@@ -1,4 +1,4 @@
-import { stringify } from "querystring"
+import {stringify} from 'querystring'
 
 export function createMessageCard(
   qyonTime: string,
@@ -53,13 +53,6 @@ export function createMessageCard(
       }
     ]
   }
-  
-
-  let sectReviwers: any = {
-    activityTitle: 'Revisores',        
-    text: String(`${reviwers}`)
-  }   
-
 
   const messageCard = {
     '@type': 'MessageCard',
@@ -67,14 +60,7 @@ export function createMessageCard(
     summary: notificationSummary,
     themeColor: notificationColor,
     title: notificationSummary,
-    sections: [
-      {
-        activityTitle: 'Sessão 1',
-      },
-      {
-        activityTitle: 'Sessão 2',
-      }  
-    ],
+    sections: [sectionMain],
     potentialAction: [
       {
         '@context': 'http://schema.org',
@@ -85,11 +71,13 @@ export function createMessageCard(
     ]
   }
 
-  //if (reviwers) {
-      
-    
-   // messageCard.sections.push(sectReviwers);
-  //}
+  if (reviwers) {
+    let sectReviwers: any = {
+      activityTitle: 'Revisores',
+      text: `${reviwers}`
+    }
+    messageCard.sections.push(sectReviwers)
+  }
 
   return messageCard
 }
