@@ -73,14 +73,14 @@ export function createMessageCard(
     ]
   }
 
-  if (reviwers) {
+  //if (reviwers) {
     let sectReviwers: any = {
       activityTitle: 'Revisores',        
-      text: String(`${reviwers}`),
-    }  
+      text: String(`${reviwers}`)
+    }     
     
     messageCard.sections.push(sectReviwers);
-  }
+  //}
 
   return messageCard
 }
