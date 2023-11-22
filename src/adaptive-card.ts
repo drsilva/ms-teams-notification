@@ -59,7 +59,7 @@ export function createAdaptiveCard(
                   {
                     type: 'TextBlock',
                     spacing: 'none',
-                    text: 'Qyon - Time Gestão Fácil',
+                    text: 'DevOps',
                     isSubtle: true,
                     wrap: true
                   }
